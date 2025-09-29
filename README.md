@@ -1,2 +1,7 @@
-Jewelry store, course work
+Jewelry store, course work 
+
 Фронтенд, бэкенд, микросервисы (основной функционал магазина и авторизация). 
+1) Фронтенд (React) находится в разделе curs 
+2) Микросервис авторизации (Java, Spring, JWT, данные в Redis) - в security, 
+3) Микросервис взаимодействия с товарами (Java, Spring, данные в PostgreSQL) - в разделе prac.
+
