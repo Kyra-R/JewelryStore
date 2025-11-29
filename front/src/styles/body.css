@@ -1,0 +1,49 @@
+.body {
+    text-align: center;
+    font-size: 1.2rem;;
+    background-color: #88A6B2;
+   
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 10vh;
+  }
+
+.main-image {
+  height: 40vmin;
+}
+
+.main-text {
+  color: white;
+  font-size: 4vh;
+  font-weight: bold;
+}
+
+
+@media (prefers-reduced-motion: no-preference) {
+  .main-image {
+    animation: App-logo-spin infinite 5s linear;
+  }
+}
+
+ .main-grid {
+	 display: grid;
+    grid-template-columns: 1fr 1fr 1fr; 
+    grid-template-rows: 1fr 1.2fr 1fr 1fr;
+    grid-template-areas: 
+      "block-1 block-1 block-1"
+      "block-3 block-3 block-4"
+      "block-5 block-6 block-6"
+      "block-7 block-7 block-7"; 
+  }
+  
+
+  
+  .block-1 { grid-area: block-1; }
+.block-2 { grid-area: block-2; }
+.block-3 { grid-area: block-3; }
+.block-4 { grid-area: block-4; }
+.block-5 { grid-area: block-5; }
+.block-6 { grid-area: block-6; }
+.block-7 { grid-area: block-7; }

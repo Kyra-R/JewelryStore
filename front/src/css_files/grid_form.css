@@ -1,0 +1,231 @@
+.form {
+  background-color: #393A42;
+  border-radius: 15px;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.form_container{
+background-color: #26272D;
+  width: 50%;
+  height: 100%;
+
+  border: 10px solid;
+  border-image-source: linear-gradient(to left, #743ad5, #d53a9d);
+  border-image-slice: 10% 10%;
+  border-image-width: 5px 10px;
+}
+@media screen and (max-width: 1000px) { 
+  .form_container{
+    width: 90%;
+  }
+}
+
+.input_container{
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  grid-template-rows: 1fr 1fr 1fr; 
+  gap: 20px 20px;
+  grid-template-areas: 
+    "first-name last-name"
+    "email telephone"
+    "message message"; 
+}
+@media screen and (max-width: 600px) { 
+  .input_container{
+    grid-template-columns: 1fr; 
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr; 
+    grid-template-areas: 
+      "first-name"
+      "last-name"
+      "email"
+      "telephone"
+      "message"; 
+  }
+}
+.first-name { grid-area: first-name; }
+.last-name { grid-area: last-name; }
+.email { grid-area: email; }
+.telephone { grid-area: telephone; }
+.message { grid-area: message; }
+
+.title {
+  text-align: center;
+  color: #ffffff;
+  font-family: sans-serif;
+  font-size: 28px;
+  margin-bottom: 18px;
+}
+
+.input-container {
+  position: relative;
+  height: 35px;
+}
+
+.input {
+  background-color: #2F3039;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #ffffff;
+  font-size: 18px;
+  height: 100%;
+  outline: 0;
+  padding: 4px 20px 0;
+  width: 100%;
+}
+
+.bg {
+  background-color: #26272D;
+  border-radius: 10px;
+  height: 20px;
+  left: 40px;
+  position: absolute;
+  top: -20px;
+  transform: translateY(0);
+  transition: transform .2s;
+}
+
+ .bg_1 {
+  width: 70px;
+}
+.bg_2 {
+  width: 85px;
+}
+.bg_3 {
+  width: 70px;
+}
+.bg_4 {
+  width: 45%;
+  min-width: 120px;
+}
+.bg_5 {
+  width: 70px;
+}
+
+.input:focus ~ .bg {
+  transform: translateY(8px);
+}
+
+.placeholder {
+  color: grey;
+  font-family: sans-serif;
+  left: 20px;
+  line-height: 14px;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: 0 50%;
+  transition: transform .2s, color .2s;
+  top: 15px;
+}
+
+.input:focus ~ .placeholder {
+  transform: translateY(-25px) translateX(40px) scale(0.75);
+}
+
+.input:focus ~ .placeholder {
+  color: #9c7a34;
+}
+
+.submit {
+  background-color: #40424D;
+  border-radius: 10px;
+  border: 0;
+  color: #dedede;
+  cursor: pointer;
+  font-size: 18px;
+  height: 50px;
+  margin-top: 1em;
+  width: 100%;
+}
+
+.submit:active {
+  background-color: #E6CC95;
+}
+
+@media screen and (min-width: 381px) {
+footer {
+grid-area: footer;
+display: flex;
+}
+
+address {
+flex: 20%;
+}
+
+.socials {
+    background-color: transparent;
+    position: relative;
+
+    top: 10px;
+    flex: 80%;
+}
+}
+@media screen and (max-width: 380px) {
+footer {
+grid-area: footer;
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+  align-items: center;
+}
+
+
+.socials {
+	
+    background-color: transparent;
+    position: relative;
+}
+}
+
+
+.socials-flex {
+    height: 50px;
+
+    display: flex;
+    flex-wrap: nowrap;align-items: center;
+    justify-content: space-around;
+}
+
+.socials-flex-item {
+    position: relative;
+    overflow: hidden;
+    height: 50px;
+    width: 50px;
+    margin: 5px;
+    background-color: #DBDFE2;
+    border-radius: 2em;
+    z-index: 2;
+}
+
+.socials-flex-item:hover .socials-flex-item-hide {
+    top: 0;
+    transform: translate(0, 0);
+    display: flex;
+}
+
+.socials-flex-item img {
+    position: absolute;
+    height: 25px;
+    width: 25px;
+    transform: translate(50%, 50%);
+    z-index: 3;
+}
+
+.socials-flex-item-hide {
+    position: absolute;
+    background: linear-gradient(147deg, #FFE53B 0%, #FF2525 74%);
+    height: 50px;
+    width: 50px;
+    z-index: -1;
+    transform: translate(0, -100%);
+    transition: 0.25s ease-in;
+    display: flex;
+    /*display: none;*/
+    border-radius: 2em;
+    top: 0;
+}
