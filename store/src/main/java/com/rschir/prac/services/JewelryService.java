@@ -9,7 +9,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JewelryService {
@@ -67,6 +70,46 @@ public class JewelryService {
     @Transactional(readOnly = true)
     public List<Jewelry> readAll() {
         return jewelryRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public String collectTypesMaterials()
+    {
+        /*List<Jewelry> list = jewelryRepository.findAll();
+        EnumMap<ProductType, EnumSet<ProductMaterial>> result = new EnumMap<>(ProductType.class);
+
+
+        for(Jewelry jewelry: list)
+        {
+            if(jewelry.getCount() == 0){
+                continue;
+            } else
+            if(result.containsKey(jewelry.getJewelryType())){
+                result.get(jewelry.getJewelryType()).add(jewelry.getJewelryMaterial());
+            } else {
+                result.put(jewelry.getJewelryType(), EnumSet.of(jewelry.getJewelryMaterial()));
+            }
+        }*/
+
+        EnumMap<ProductType, EnumSet<ProductMaterial>> result =
+                jewelryRepository.findAll().stream()
+                        .filter(j -> j.getCount() > 0)
+                        .collect(Collectors.groupingBy(
+                                Jewelry::getJewelryType,
+                                () -> new EnumMap<>(ProductType.class),
+                                Collectors.mapping(
+                                        Jewelry::getJewelryMaterial,
+                                        Collectors.toCollection(() -> EnumSet.noneOf(ProductMaterial.class))
+                                )
+                        ));
+
+        StringBuilder str = new StringBuilder();
+        for(var obj: result.entrySet())
+        {
+            System.out.println(obj.getKey() + " " + obj.getValue() + ";");
+            str.append(obj.getKey() + " " + obj.getValue() + "; ");
+        }
+        return str.toString();
     }
 
 

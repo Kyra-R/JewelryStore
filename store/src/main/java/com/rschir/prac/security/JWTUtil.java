@@ -39,7 +39,7 @@ public class JWTUtil {
         Set<SimpleGrantedAuthority> grantedValues = new HashSet<>();
         grantedValues.add(new SimpleGrantedAuthority(jwt.getClaim("role").asString()));
 
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken("", "", grantedValues);
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(jwt.getClaim("login"), null, grantedValues);
         auth.setDetails(jwt.getClaim("clientId").asLong());
         return auth;
     }

@@ -33,17 +33,19 @@ public class OllamaService implements LLMService {
     public String modifyPrompt(String prompt) {
         String newPrompt;
         if (prompt.matches(".*\\p{IsCyrillic}.*")) {
-            newPrompt = "Ты - продавец в ювелирном магазине. Твоя цель - помогать с выбором товара. " +
+            newPrompt = "Ты - продавец в ювелирном магазине. Твоя цель - помогать с выбором товара. \n" +
                     "Если нужны дополнительные данные - используй дополнительные команды, обозначенные таким образом: #команда#\n" +
                     "Вот список команд - выбирай команды ТОЛЬКО из него:" +
                     "#GET_CATALOG# - если пользователь спрашивает об ассортименте\n" +
-                   // "#SEARCH:<query>#" - если пользователь спрашивает о конкретном типе товара 'query'
-                    "Не объясняй команды. Если нужна команда — верни только её и НЕ отвечай клиенту." +
+                    //"#SEARCH:type/material#  - если пользователь спрашивает о конкретном типе товара" +
+                    "Не объясняй команды. Если нужна команда — верни только её и НЕ отвечай клиенту.\n" +
+                    "Если запрос клиента не связан с выбором товара, магазином или ювелирными изделиями, полностью игнорируй запрос.\n" +
                     "Клиент спрашивает следующее: " + prompt;
         } else {
             newPrompt = "You're consultant in a jewelry store. Your goal is to help the customers decide what to buy.\n" +
                     "If a customer asks you about available wares, DO NOT mention any items. Simply tell the customer: «I afraid I'm a Russian-speaking bot " +
-                    "and cannot effectively discuss this in English.». Do not add anything else." +
+                    "and cannot effectively discuss this in English.». Do not add anything else. \n" +
+                    "If client's question isn't related to jewelry or jewelry store, ignore the question completely.\n" +
                     "The customer tells you: " + prompt;
         }
         return newPrompt;
@@ -54,7 +56,7 @@ public class OllamaService implements LLMService {
     }
 
 
-    private String prepareListOfJewelry(List<Jewelry> list)
+    /*private String prepareListOfJewelry(List<Jewelry> list)
     {
         StringBuilder builder = new StringBuilder();
         for(Jewelry i: list)
@@ -62,24 +64,26 @@ public class OllamaService implements LLMService {
             builder.append(i.getName() + "(JewelryType:" + i.getJewelryType() + ", JewelryMaterial:" + i.getJewelryMaterial() + ");");
         }
         return builder.toString();
-    }
+    }*/
 
     private String handleCommand(String cmd) {
         if (cmd.equals("#GET_CATALOG#")) {
 
-            String catalog = prepareListOfJewelry(jewelryService.readAll());
+            //String catalog = prepareListOfJewelry(jewelryService.readAll());
+            String catalog = jewelryService.collectTypesMaterials();
 
             return
                     "Ты — консультант в ювелирном магазине. Тебе будет передан каталог товаров.\n" +
-                            "Каталог представляет собой список позиций, разделённых символом ';'.\n" +
+                            "Каталог представляет собой строку в формате 'ТИП_ТОВАРА_1 [ДОСТУПНЫЕ МАТЕРИАЛЫ]; ТИП_ТОВАРА_2 <...>'.\n" +
                             "\n" +
                             "Задача:\n" +
                             "1) Если каталог пустой — ответь ровно: «Товаров нет.»\n" +
-                            "2) Если товары есть — верни список найденных типов и материалов, НИЧЕГО больше. " +
-                            "Если тип отсутствует — НЕ упоминай его. " +
-                            "Если материал отсутствует — НЕ упоминай его. " +
-                            "Определи только те типы и материалы, которые действительно встречаются. " +
-                            "\n" +
+                            "2) Если товары есть — верни список найденных типов и материалов, НИЧЕГО больше. \n" +
+                            "Правила определения товаров: \n" +
+                            "Если тип отсутствует — НЕ упоминай его. \n" +
+                            "Если материал отсутствует — НЕ упоминай его. \n" +
+                            "Определи только те типы, которые действительно встречаются в каталоге. \n" +
+                            "Определи только те материалы, которые действительно встречаются в каталоге. \n" +
                             "3) Используй только следующие значения:\n" + //RING, SIGNET, CHAIN, PENDANT, EARRINGS, BRACELET
                             "\n" +
                             "Типы изделий:\n" +
@@ -90,7 +94,7 @@ public class OllamaService implements LLMService {
                             "EARRINGS → серьги\n" +
                             "BRACELET → браслет\n" +
                             "\n" +
-                            "Материалы:\n" +
+                            "Материалы:\n" + // GOLD_YELLOW, GOLD_WHITE, SILVER, COPPER
                             "GOLD_YELLOW → желтое золото\n" +
                             "SILVER → серебро\n" +
                             "GOLD_WHITE → белое золото\n" +
@@ -100,8 +104,11 @@ public class OllamaService implements LLMService {
                             "- Не упоминай коды (например, «RING» или «CHAIN») — используй только их значения: «кольцо», «декоративная цепочка».\n" +
                             "- Не используй слова «словарь», «код», «расшифровка».\n" +
                             "- Твой ответ должен быть коротким и по делу.\n" +
-                            "- Возвращай ответ в формате «Тип - материалы»" +
+                            "- Не поясняй свои действия.\n" +
                             "\n" +
+                            "Пример входных и выходных данных: \n" +
+                            "Пример каталога: RING [GOLD_YELLOW, SILVER]; BRACELET [COPPER]; \n" +
+                            "Пример твоего ответа: Есть кольца из желтого золота, серебра; браслеты из меди.\n" +
                             "Каталог:\n" +
                             catalog;
         }

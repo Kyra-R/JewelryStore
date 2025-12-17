@@ -67,6 +67,12 @@ public class JewelryRestController {
         return new ResponseEntity<>(jewelryService.create(newJewelry), HttpStatus.CREATED);
     }
 
+    @GetMapping("/admin/get")
+    public List<Jewelry> getAllJewelryAdmin() {
+        return jewelryService.readAll();
+    }
+
+
     @PutMapping("/admin/{id}")
     public Jewelry patchJewelry(@PathVariable long id, @RequestBody Jewelry updatedJewelry) {
 
